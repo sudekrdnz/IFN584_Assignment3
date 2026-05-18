@@ -40,7 +40,7 @@ public static class NumericalTicTacToeLauncher
 
     private static void Load()
     {
-        string? name = GameRunner.ReadSaveName();
+        string? name = GameRunner.ReadSaveName("NumericalTicTacToe");
         if (name == null) 
             return;
 

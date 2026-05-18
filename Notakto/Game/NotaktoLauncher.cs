@@ -57,7 +57,7 @@ public static class NotaktoLauncher
     private static void Load()
     {
         string? name =
-            GameRunner.ReadSaveName();
+            GameRunner.ReadSaveName("Notakto");
 
         if (name == null)
             return;
