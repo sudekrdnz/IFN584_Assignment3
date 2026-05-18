@@ -21,7 +21,7 @@ class Program
             {
                 case "1": ConnectFourLauncher.Run(); break;
                 case "2": TicTacToeLauncher.Run(); break;
-                case "3": Console.WriteLine("\n  [Your game here] — not yet implemented"); Console.ReadLine(); break;
+                case "3": NumericalTicTacToeLauncher.Run(); break;
                 case "4": Console.WriteLine("\n  [Your game here] — not yet implemented"); Console.ReadLine(); break;
                 case "5": GomokuLauncher.Run(); break;
                 case "6":
@@ -45,7 +45,7 @@ class Program
         Console.WriteLine();
         Console.WriteLine("  1. Connect Four");
         Console.WriteLine("  2. Tic-Tac-Toe");
-        Console.WriteLine("  3. Numerical Tic-Tac-Toe    [not yet implemented]");
+        Console.WriteLine("  3. Numerical Tic-Tac-Toe");
         Console.WriteLine("  4. Notakto                  [not yet implemented]");
         Console.WriteLine("  5. Gomoku");
         Console.WriteLine("  6. Exit");
