@@ -1,144 +1,78 @@
 using BoardGameFramework.Core.Grid;
 using BoardGameFramework.Core.Pieces;
-using BoardGameFramework.Notakto.Pieces;
 
 namespace BoardGameFramework.Notakto.Grid;
 
+/// <summary>
+/// Container for three SubBoards that make up a Notakto game.
+/// Delegates per-board logic to SubBoard and coordinates display,
+/// serialisation, and game-over detection across all three boards.
+/// </summary>
 public class NotaktoGrid : GameBoard
 {
-    private readonly Piece?[,,] _boards;
-    private readonly bool[] _deadBoards;
+    public const int BoardCount = 3;
+
+    private readonly SubBoard[] _subBoards;
 
     public NotaktoGrid()
-        : base(3, 3)
+        : base(SubBoard.Size, SubBoard.Size)
     {
-        _boards = new Piece?[3, 3, 3];
-        _deadBoards = new bool[3];
+        _subBoards = Enumerable.Range(0, BoardCount)
+            .Select(_ => new SubBoard())
+            .ToArray();
     }
 
     // Required abstract method from GameBoard — not used in Notakto
-    // Notakto uses the 4-parameter overload (board, row, col, piece) instead
-    public override void PlacePiece(
-        int row,
-        int col,
-        Piece piece)
-    {
-        throw new NotSupportedException(
-            "Use PlacePiece(board, row, col, piece) for Notakto.");
-    }
+    // Notakto uses the 4-parameter overload (boardIndex, row, col, piece) instead
+    public override void PlacePiece(int row, int col, Piece piece)
+        => throw new NotSupportedException(
+            "Use PlacePiece(boardIndex, row, col, piece) for Notakto.");
 
-    // Actual Notakto placement
-    public void PlacePiece(
-        int board,
-        int row,
-        int col,
-        Piece piece)
-    {
-        _boards[board, row, col] = piece;
+    // Notakto-specific placement — delegates to SubBoard
+    public void PlacePiece(int boardIndex, int row, int col, Piece piece)
+        => _subBoards[boardIndex].Place(row, col, piece);
 
-        if (CheckBoardDead(board))
-            _deadBoards[board] = true;
-    }
+    public bool IsEmpty(int boardIndex, int row, int col)
+        => _subBoards[boardIndex].IsEmpty(row, col);
 
-    public bool IsEmpty(
-        int board,
-        int row,
-        int col)
-    {
-        return _boards[board, row, col] == null;
-    }
-
-    public bool IsBoardDead(int board)
-    {
-        return _deadBoards[board];
-    }
+    public bool IsBoardDead(int boardIndex)
+        => _subBoards[boardIndex].IsDead;
 
     public bool AreAllBoardsDead()
-    {
-        return _deadBoards.All(x => x);
-    }
+        => _subBoards.All(b => b.IsDead);
 
-    // Required abstract method
-    public override bool CheckWin(int playerNumber)
-    {
-        return false;
-    }
-
-    private bool CheckBoardDead(int board)
-    {
-        // Rows
-        for (int r = 0; r < 3; r++)
-        {
-            if (Same(board, r, 0, r, 1, r, 2))
-                return true;
-        }
-
-        // Columns
-        for (int c = 0; c < 3; c++)
-        {
-            if (Same(board, 0, c, 1, c, 2, c))
-                return true;
-        }
-
-        // Diagonals
-        if (Same(board, 0, 0, 1, 1, 2, 2))
-            return true;
-
-        if (Same(board, 0, 2, 1, 1, 2, 0))
-            return true;
-
-        return false;
-    }
-
-    private bool Same(
-        int b,
-        int r1, int c1,
-        int r2, int c2,
-        int r3, int c3)
-    {
-        return _boards[b, r1, c1] != null
-            && _boards[b, r2, c2] != null
-            && _boards[b, r3, c3] != null;
-    }
+    // CheckWin not used — AreAllBoardsDead() drives game-over instead
+    public override bool CheckWin(int playerNumber) => false;
 
     public override string ExportState()
     {
-        // Serialize each cell as 0 (empty) or 1 (occupied),
-        // plus the dead-board flags
-        var cells = new List<int>();
-        for (int b = 0; b < 3; b++)
-            for (int r = 0; r < 3; r++)
-                for (int c = 0; c < 3; c++)
-                    cells.Add(_boards[b, r, c] == null ? 0 : 1);
-
-        var data = new
-        {
-            Cells = cells,
-            DeadBoards = _deadBoards.ToArray()
-        };
+        var cells = _subBoards.SelectMany(b => b.ExportCells()).ToList();
+        var dead  = _subBoards.Select(b => b.IsDead).ToArray();
+        var data  = new { Cells = cells, DeadBoards = dead };
         return System.Text.Json.JsonSerializer.Serialize(data);
     }
 
     public override void ImportState(string state)
     {
-        var data = System.Text.Json.JsonSerializer
+        var doc = System.Text.Json.JsonSerializer
             .Deserialize<System.Text.Json.JsonElement>(state);
 
-        var cells = data.GetProperty("Cells");
-        int index = 0;
-        for (int b = 0; b < 3; b++)
-            for (int r = 0; r < 3; r++)
-                for (int c = 0; c < 3; c++)
-                {
-                    int val = cells[index++].GetInt32();
-                    _boards[b, r, c] = val == 0
-                        ? null
-                        : new NotaktoPiece(1);
-                }
+        var flat = doc.GetProperty("Cells")
+            .EnumerateArray()
+            .Select(e => e.GetInt32())
+            .ToList();
 
-        var dead = data.GetProperty("DeadBoards");
-        for (int b = 0; b < 3; b++)
-            _deadBoards[b] = dead[b].GetBoolean();
+        var dead = doc.GetProperty("DeadBoards")
+            .EnumerateArray()
+            .Select(e => e.GetBoolean())
+            .ToArray();
+
+        int cellsPerBoard = SubBoard.Size * SubBoard.Size;
+        for (int b = 0; b < BoardCount; b++)
+        {
+            _subBoards[b].ImportCells(flat, b * cellsPerBoard);
+            _subBoards[b].SetDead(dead[b]);
+        }
     }
 
     public override void Display()
@@ -147,9 +81,9 @@ public class NotaktoGrid : GameBoard
 
         // Header row: Board 1   Board 2   Board 3
         Console.Write("  ");
-        for (int b = 0; b < 3; b++)
+        for (int b = 0; b < BoardCount; b++)
         {
-            string label = _deadBoards[b]
+            string label = _subBoards[b].IsDead
                 ? $"Board {b + 1} [DEAD]"
                 : $"Board {b + 1}";
             Console.Write($"{label,-18}");
@@ -157,33 +91,27 @@ public class NotaktoGrid : GameBoard
         Console.WriteLine();
         Console.WriteLine();
 
-        // Grid rows: all 3 boards side by side
-        // Position numbers: 1-3 top row, 4-6 mid, 7-9 bottom
-        string[] separator = ["---+---+---", "---+---+---", "---+---+---"];
-
-        for (int r = 0; r < 3; r++)
+        // All 3 boards side by side, row by row
+        for (int r = 0; r < SubBoard.Size; r++)
         {
-            // Cell row
             Console.Write("  ");
-            for (int b = 0; b < 3; b++)
+            for (int b = 0; b < BoardCount; b++)
             {
-                for (int c = 0; c < 3; c++)
+                for (int c = 0; c < SubBoard.Size; c++)
                 {
-                    char symbol = _boards[b, r, c]?.Symbol ?? ' ';
-                    Console.Write($" {symbol} ");
-                    if (c < 2) Console.Write("|");
+                    Console.Write($" {_subBoards[b].SymbolAt(r, c)} ");
+                    if (c < SubBoard.Size - 1) Console.Write("|");
                 }
                 Console.Write("   ");
             }
             Console.WriteLine();
 
-            // Separator row (not after last row)
-            if (r < 2)
+            if (r < SubBoard.Size - 1)
             {
                 Console.Write("  ");
-                for (int b = 0; b < 3; b++)
+                for (int b = 0; b < BoardCount; b++)
                 {
-                    Console.Write(separator[b]);
+                    Console.Write("---+---+---");
                     Console.Write("   ");
                 }
                 Console.WriteLine();
