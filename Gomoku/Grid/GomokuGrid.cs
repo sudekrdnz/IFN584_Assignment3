@@ -100,18 +100,29 @@ public class GomokuGrid : GameBoard
     {
         var doc = JsonSerializer.Deserialize<JsonElement>(state);
 
-        // Restore grid dimensions from save
-        int rows = doc.GetProperty("Rows").GetInt32();
-        int cols = doc.GetProperty("Columns").GetInt32();
-        if (rows != Rows || cols != Columns)
-        {
-            Rows = rows;
-            Columns = cols;
-            Cells = new Core.Pieces.Piece?[rows, cols];
-        }
+        List<int> flat;
 
-        var flat = doc.GetProperty("Cells")
-            .EnumerateArray().Select(e => e.GetInt32()).ToList();
+        // Handle both new format {Rows, Columns, Cells:[...]} and
+        // legacy snapshot format [...] stored in MoveCommand.GridSnapshot
+        if (doc.ValueKind == JsonValueKind.Array)
+        {
+            // Legacy flat list snapshot (from MoveCommand undo/redo)
+            flat = doc.EnumerateArray().Select(e => e.GetInt32()).ToList();
+        }
+        else
+        {
+            // New format with dimensions
+            int rows = doc.GetProperty("Rows").GetInt32();
+            int cols = doc.GetProperty("Columns").GetInt32();
+            if (rows != Rows || cols != Columns)
+            {
+                Rows = rows;
+                Columns = cols;
+                Cells = new BoardGameFramework.Core.Pieces.Piece?[rows, cols];
+            }
+            flat = doc.GetProperty("Cells")
+                .EnumerateArray().Select(e => e.GetInt32()).ToList();
+        }
 
         for (int r = 0; r < Rows; r++)
             for (int c = 0; c < Columns; c++)
