@@ -10,8 +10,7 @@ namespace BoardGameFramework.TicTacToe.Game;
 
 public class TicTacToeGame : BoardGame
 {
-    private int _winner = 0;
-    private bool _draw = false;
+    private int? _winner = null;
     private int _pendingPosition = -1;
 
     public TicTacToeGame(Player[] players) : base(players)
@@ -24,8 +23,7 @@ public class TicTacToeGame : BoardGame
     {
         BaseInitialise();
         InitialiseHelpMenu();
-        _winner = 0;
-        _draw = false;
+        _winner = null;
         _pendingPosition = -1;
     }
 
@@ -126,7 +124,7 @@ public class TicTacToeGame : BoardGame
 
         if (Board.IsFull())
         {
-            _draw = true;
+            _winner = 0; // 0 = draw
             return true;
         }
 
@@ -135,7 +133,7 @@ public class TicTacToeGame : BoardGame
 
     protected override void AnnounceResult()
     {
-        if (_draw)
+        if (_winner == 0)
         {
             Console.WriteLine("Game over: Draw.");
             return;

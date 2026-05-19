@@ -14,7 +14,7 @@ public class NumericalTicTacToeGame : BoardGame
 {
     private readonly NumericalTicTacToeGrid _nttGrid;
     private readonly NumericalTicTacToeSave _nttSave;
-    private int _winner = 0;
+    private int? _winner = null;
 
     private int _lastRow;
     private int _lastCol;
@@ -176,7 +176,7 @@ public class NumericalTicTacToeGame : BoardGame
         }
         if (_nttGrid.IsFull())
         {
-            _winner = 0;
+            _winner = 0; // 0 = draw
             return true;
         }
         return false;
@@ -190,7 +190,7 @@ public class NumericalTicTacToeGame : BoardGame
         }
         else
         {
-            var winner = Players[_winner - 1];
+            var winner = Players[_winner!.Value - 1];
             Console.WriteLine($"\n Player {winner.Name} is the winner!");
         }
     }
