@@ -8,7 +8,7 @@ public static class GomokuLauncher
     public static void Run()
     {
         GameRunner.ShowGameHeader("GOMOKU",
-            "15×15 board. First to 5 in a row wins.",
+            "9-19 board size. First to 5 in a row wins.",
             "Enter coordinate e.g. H8.");
         string? mode = GameRunner.ReadMode();
         if (mode == null) return;
@@ -53,6 +53,7 @@ public static class GomokuLauncher
             (n, i) => new GomokuComputerPlayer(n, i));
 
         Console.Clear();
+        // Size is restored from the save file via GomokuGrid.ImportState
         var game = new GomokuGame(players);
         GameRunner.TryLoad(game.LoadGame, name);
         if (!game.IsGameOver) game.RunLoaded();
