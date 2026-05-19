@@ -120,9 +120,7 @@ public class NumericalTicTacToeGrid : GameBoard
             for (int col = 0; col < Columns; col++)
             {
                 var piece = Cells[row, col] as NumericalTicTacToePiece;
-                // Show placed number, or position number if empty
-                int pos = row * Columns + col + 1;
-                string cell = piece != null ? $"{piece.Value,2}" : $" {pos}";
+                string cell = piece != null ? $"{piece.Value,2}" : "  ";
                 Console.Write($" {cell} ");
                 if (col < Columns - 1) Console.Write("|");
             }
