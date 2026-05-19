@@ -5,6 +5,13 @@ public class HelpMenu
     private readonly Dictionary<string, string> _commands = new();
     private readonly List<string> _examples = new();
 
+    // Call before re-populating — prevents duplicate entries if InitialiseHelpMenu runs twice
+    public void Clear()
+    {
+        _commands.Clear();
+        _examples.Clear();
+    }
+
     public void AddCommand(string key, string description)
         => _commands[key] = description;
 

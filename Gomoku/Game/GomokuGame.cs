@@ -38,6 +38,7 @@ public class GomokuGame : BoardGame
 
     protected override void InitialiseHelpMenu()
     {
+        HelpMenu.Clear();
         HelpMenu.AddCommand("A1-O15", 
             "Place piece using coordinate (e.g. H8)");
         HelpMenu.AddCommand("U", "Undo last move");

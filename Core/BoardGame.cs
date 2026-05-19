@@ -228,6 +228,7 @@ public abstract class BoardGame
             var (playerIndex, turnCount) = SaveManager.GetLoadedState();
             CurrentPlayerIndex = playerIndex;
             TurnCount = turnCount;
+            _hasUnsavedMoves = false; // loaded state is already saved
             Console.WriteLine("Game loaded successfully!");
         }
         catch (InvalidOperationException ex)

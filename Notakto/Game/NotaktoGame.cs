@@ -38,6 +38,7 @@ public class NotaktoGame : BoardGame
 
     protected override void InitialiseHelpMenu()
     {
+        HelpMenu.Clear();
         HelpMenu.AddCommand(
             "1 A1",
             "Place X on Board 1 at A1");

@@ -43,6 +43,7 @@ public class NumericalTicTacToeGame : BoardGame
 
     protected override void InitialiseHelpMenu()
     {
+        HelpMenu.Clear();
         HelpMenu.AddCommand("pos=value", "Place number at position 1-9, e.g. 5=7");
         HelpMenu.AddCommand("U", "Undo last move");
         HelpMenu.AddCommand("R", "Redo last undone move");
@@ -89,13 +90,11 @@ public class NumericalTicTacToeGame : BoardGame
         }
         catch (FormatException)
         {
-            Console.WriteLine("Incorrect format. Use position=value  e.g. 5=7");
-            return;
+            throw new InvalidMoveException("Incorrect format. Use position=value  e.g. 5=7");
         }
         catch (IndexOutOfRangeException)
         {
-            Console.WriteLine("Incorrect format. Use position=value  e.g. 5=7");
-            return;
+            throw new InvalidMoveException("Incorrect format. Use position=value  e.g. 5=7");
         }
         //Check if within board's bounds
         if (row < 0 || row >= _nttGrid.Rows || col < 0 || col >= _nttGrid.Columns)
@@ -104,13 +103,9 @@ public class NumericalTicTacToeGame : BoardGame
         if (_nttGrid.GetCell(row, col) != null)
             throw new InvalidMoveException("The cell is full. Try again.");
 
-        //Check if player numbers are within board's range
         int max = _nttGrid.Rows * _nttGrid.Columns;
         if (num < 1 || num > max)
-        {
-            Console.WriteLine($"You must input a number between 1 and {max}.");
-            return;
-        }
+            throw new InvalidMoveException($"You must input a number between 1 and {max}.");
 
         //Check if numbers belong to player
         var playableNumber = _nttGrid.GeneratePlayableNumbers(player.PlayerNumber);

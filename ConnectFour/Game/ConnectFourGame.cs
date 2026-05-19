@@ -29,6 +29,7 @@ public class ConnectFourGame : BoardGame
 
     protected override void InitialiseHelpMenu()
     {
+        HelpMenu.Clear();
         HelpMenu.AddCommand($"1-{_cfGrid.Columns}", $"Drop disc into column 1-{_cfGrid.Columns}");
         HelpMenu.AddCommand("U", "Undo last move");
         HelpMenu.AddCommand("R", "Redo last undone move");
