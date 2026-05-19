@@ -33,6 +33,7 @@ public class NumericalTicTacToeGame : BoardGame
     protected override void Initialise()
     {
         BaseInitialise();
+        _winner = null;
         InitialiseHelpMenu();
         Console.WriteLine($"=== Numerical Tic Tac Toe ({_nttGrid.Rows}x{_nttGrid.Columns}) ===");
         Console.WriteLine($"Sum required to win: {_nttGrid.SumToWin}");

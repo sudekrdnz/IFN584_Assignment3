@@ -29,13 +29,13 @@ public class TicTacToeGrid : GameBoard
 
     public override bool CheckWin(int playerNumber)
     {
-        for (int row = 0; row < 3; row++)
+        for (int row = 0; row < Rows; row++)
             if (Cells[row, 0]?.Owner == playerNumber &&
                 Cells[row, 1]?.Owner == playerNumber &&
                 Cells[row, 2]?.Owner == playerNumber)
                 return true;
 
-        for (int col = 0; col < 3; col++)
+        for (int col = 0; col < Columns; col++)
             if (Cells[0, col]?.Owner == playerNumber &&
                 Cells[1, col]?.Owner == playerNumber &&
                 Cells[2, col]?.Owner == playerNumber)
@@ -84,10 +84,10 @@ public class TicTacToeGrid : GameBoard
     {
         Console.WriteLine();
 
-        for (int row = 0; row < 3; row++)
+        for (int row = 0; row < Rows; row++)
         {
             Console.Write(" ");
-            for (int col = 0; col < 3; col++)
+            for (int col = 0; col < Columns; col++)
             {
                 int position = row * 3 + col + 1;
                 char symbol = Cells[row, col]?.Symbol ?? position.ToString()[0];
@@ -97,7 +97,7 @@ public class TicTacToeGrid : GameBoard
             }
 
             Console.WriteLine();
-            if (row < 2) Console.WriteLine(" ---+---+---");
+            if (row < Rows - 1) Console.WriteLine(" ---+---+---");
         }
 
         Console.WriteLine();

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using BoardGameFramework.Core.Exceptions;
 using BoardGameFramework.Core.Players;
 using BoardGameFramework.Core.Save;
@@ -116,9 +117,9 @@ public static class GameRunner
             names = types = [];
             return false;
         }
-        catch (Exception ex)
+        catch (JsonException ex)
         {
-            Console.WriteLine($"\n  Failed to read save file: {ex.Message}");
+            Console.WriteLine($"\n  Save file is corrupted: {ex.Message}");
             Console.WriteLine("  Press Enter to continue...");
             Console.ReadLine();
             names = types = [];
