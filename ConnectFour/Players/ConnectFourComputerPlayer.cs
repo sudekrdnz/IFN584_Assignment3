@@ -30,7 +30,7 @@ public class ConnectFourComputerPlayer : ComputerPlayer
     public int FindBestMove(ConnectFourGrid grid)
     {
         string saved = grid.ExportState();
-        for (int c = 0; c < 7; c++)
+        for (int c = 0; c < grid.Columns; c++)
         {
             if (grid.IsColumnFull(c)) continue;
             var piece = new ConnectFourPiece(PlayerNumber, _symbol);
@@ -44,7 +44,7 @@ public class ConnectFourComputerPlayer : ComputerPlayer
 
     public int ChooseRandomMove(ConnectFourGrid grid)
     {
-        var available = Enumerable.Range(0, 7)
+        var available = Enumerable.Range(0, grid.Columns)
             .Where(c => !grid.IsColumnFull(c)).ToList();
         return available.Count > 0 ? available[_rng.Next(available.Count)] : -1;
     }
