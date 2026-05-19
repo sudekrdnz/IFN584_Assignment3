@@ -31,7 +31,6 @@ public class TicTacToeGame : BoardGame
 
     protected override void InitialiseHelpMenu()
     {
-        HelpMenu = new HelpMenu();
         HelpMenu.AddCommand("1-9", "Place your piece in a numbered square.");
         HelpMenu.AddCommand("S", "Save the current game.");
         HelpMenu.AddCommand("U", "Undo move.");
