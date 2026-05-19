@@ -49,14 +49,13 @@ public class GomokuGame : BoardGame
         HelpMenu.AddCommand("H", "Show help");
         HelpMenu.AddExample("H8  → place piece at column H, row 8");
         HelpMenu.AddExample("U   → undo your last move");
+        // Banner shown here for RunLoaded() (resumed game)
         Console.WriteLine(
-            $"=== Gomoku " +
-            $"({_gomokuGrid.Rows}x{_gomokuGrid.Columns})" +
-            $" — Resumed ===");
+            $"=== Gomoku ({_gomokuGrid.Rows}x{_gomokuGrid.Columns}) — Resumed ===");
         Console.WriteLine(
-            $"{Players[0].Name} = X    " +
-            $"{Players[1].Name} = O");
+            $"{Players[0].Name} = X    {Players[1].Name} = O");
     }
+
 
     protected override void Initialise()
     {
@@ -64,12 +63,13 @@ public class GomokuGame : BoardGame
         _winner = null;
         InitialiseHelpMenu();
         Console.WriteLine(
-            $"=== Gomoku " +
-            $"({_gomokuGrid.Rows}x{_gomokuGrid.Columns}) ===");
+            $"=== Gomoku ({_gomokuGrid.Rows}x{_gomokuGrid.Columns}) ===");
         Console.WriteLine(
-            $"{Players[0].Name} = X    " +
-            $"{Players[1].Name} = O");
+            $"{Players[0].Name} = X    {Players[1].Name} = O");
     }
+
+
+
 
     protected override void OnBeforeSave(
         int currentPlayerIndex, int turnCount)

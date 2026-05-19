@@ -21,21 +21,33 @@ public class ConnectFourComputerPlayer : ComputerPlayer
     {
         Console.WriteLine($"{Name} (Computer) is thinking...");
         Thread.Sleep(300);
-        int col = FindBestMove(grid);
-        if (col == -1) col = ChooseRandomMove(grid);
+
+        // 1. Win immediately
+        int col = FindWinningMove(grid, PlayerNumber);
+        if (col != -1) { LastColumn = col; Console.WriteLine($"{Name} chose column {col + 1}"); return; }
+
+        // 2. Block opponent from winning
+        int opponent = PlayerNumber == 1 ? 2 : 1;
+        char opponentSymbol = opponent == 1 ? 'X' : 'O';
+        col = FindWinningMove(grid, opponent, opponentSymbol);
+        if (col != -1) { LastColumn = col; Console.WriteLine($"{Name} chose column {col + 1}"); return; }
+
+        // 3. Random fallback
+        col = ChooseRandomMove(grid);
         LastColumn = col;
         Console.WriteLine($"{Name} chose column {col + 1}");
     }
 
-    private int FindBestMove(ConnectFourGrid grid)
+    private int FindWinningMove(ConnectFourGrid grid, int playerNum, char? sym = null)
     {
+        char symbol = sym ?? _symbol;
         string saved = grid.ExportState();
         for (int c = 0; c < grid.Columns; c++)
         {
             if (grid.IsColumnFull(c)) continue;
-            var piece = new ConnectFourPiece(PlayerNumber, _symbol);
+            var piece = new ConnectFourPiece(playerNum, symbol);
             grid.DropDisc(c, piece);
-            bool wins = grid.CheckWin(PlayerNumber);
+            bool wins = grid.CheckWin(playerNum);
             grid.ImportState(saved);
             if (wins) return c;
         }

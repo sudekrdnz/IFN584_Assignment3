@@ -206,14 +206,17 @@ public class NumericalTicTacToeGrid : GameBoard
 
     private bool CheckDiagonalUp(int playerNumber, int SumToWin)
     {
-        for (int row = 2; row < Rows; row++)
+        for (int row = Rows - 1; row >= Rows - 1; row--) // single diagonal for NxN
+        for (int row2 = Rows - 1; row2 >= 0; row2--)
+        { break; } // replaced below
+        for (int row = Rows - 1; row >= Rows - 1; row--)
         {
-            for (int col = 0; col <= Columns - 3; col++)
+            for (int col = 0; col <= Columns - Rows; col++)
             {
                 int sum = 0;
                 bool full = true;
 
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < Rows; i++)
                 {
                     var piece = Cells[row - i, col + i] as NumericalTicTacToePiece;
 
@@ -240,14 +243,14 @@ public class NumericalTicTacToeGrid : GameBoard
 
     private bool CheckDiagonalDown(int playerNumber, int SumToWin)
     {
-        for (int row = 0; row <= Rows - 3; row++)
+        for (int row = 0; row <= Rows - Rows; row++) // row 0 only for NxN grid
         {
-            for (int col = 0; col <= Columns - 3; col++)
+            for (int col = 0; col <= Columns - Rows; col++)
             {
                 int sum = 0;
                 bool full = true;
 
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < Rows; i++)
                 {
                     var piece = Cells[row + i, col + i] as NumericalTicTacToePiece;
 
