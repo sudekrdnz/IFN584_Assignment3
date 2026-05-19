@@ -116,7 +116,8 @@ public class NumericalTicTacToeGrid : GameBoard
         Console.WriteLine();
         for (int row = 0; row < Rows; row++)
         {
-            Console.Write("  ");
+            // Cell row: " XX |" — each cell is 4 chars wide
+            Console.Write(" ");
             for (int col = 0; col < Columns; col++)
             {
                 var piece = Cells[row, col] as NumericalTicTacToePiece;
@@ -126,12 +127,13 @@ public class NumericalTicTacToeGrid : GameBoard
             }
             Console.WriteLine();
 
+            // Separator: "----+----+----" matches cell width
             if (row < Rows - 1)
             {
-                Console.Write("  ");
+                Console.Write(" ");
                 for (int col = 0; col < Columns; col++)
                 {
-                    Console.Write("-----");
+                    Console.Write("----");
                     if (col < Columns - 1) Console.Write("+");
                 }
                 Console.WriteLine();
