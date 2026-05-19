@@ -113,26 +113,33 @@ public class NumericalTicTacToeGrid : GameBoard
 
     public override void Display()
     {
-        for (int i = 0; i < Columns; i++)
+        Console.WriteLine();
+        for (int row = 0; row < Rows; row++)
         {
-            for (int k = 0; k < Columns; k++)
+            // Cell row — show number value (up to 2 digits) or blank
+            Console.Write(" ");
+            for (int col = 0; col < Columns; col++)
             {
-                Console.Write("+---");
+                var piece = Cells[row, col] as NumericalTicTacToePiece;
+                string cell = piece != null ? $"{piece.Value,2}" : "  ";
+                Console.Write($" {cell} ");
+                if (col < Columns - 1) Console.Write("|");
             }
-            Console.WriteLine("+");
+            Console.WriteLine();
 
-            for (int k = 0; k < Columns; k++)
+            // Separator row (not after last row)
+            if (row < Rows - 1)
             {
-                char symbol = Cells[i, k]?.Symbol ?? ' ';
-                Console.Write($" {symbol}");
+                Console.Write(" ");
+                for (int col = 0; col < Columns; col++)
+                {
+                    Console.Write("----");
+                    if (col < Columns - 1) Console.Write("+");
+                }
+                Console.WriteLine();
             }
-            Console.WriteLine($"|");
         }
-        for (int i = 0; i < Columns; i++)
-        {
-            Console.Write("+---");
-        }
-        Console.WriteLine("+");
+        Console.WriteLine();
     }
 
     private bool CheckHorizontal(int playerNumber, int SumToWin)
