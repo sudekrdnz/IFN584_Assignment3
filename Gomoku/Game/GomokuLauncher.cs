@@ -14,6 +14,7 @@ public static class GomokuLauncher
         if (mode == null) return;
         if (mode == "3") { Load(); return; }
 
+        int size = GameRunner.ReadBoardSize(9, 19, 15, "board size (9-19)");
         string p1Name = GameRunner.ReadName("Player 1");
         Player[] players = mode == "2"
             ?
@@ -29,7 +30,7 @@ public static class GomokuLauncher
             ];
 
         Console.Clear();
-        new GomokuGame(players).Run();
+        new GomokuGame(players, size).Run();
         GameRunner.Pause();
     }
 

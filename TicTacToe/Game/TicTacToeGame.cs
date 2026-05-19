@@ -1,4 +1,5 @@
 using BoardGameFramework.Core;
+using BoardGameFramework.Core.Exceptions;
 using BoardGameFramework.Core.Commands;
 using BoardGameFramework.Core.Players;
 using BoardGameFramework.TicTacToe.Commands;
@@ -62,16 +63,10 @@ public class TicTacToeGame : BoardGame
             position = computer.LastPosition;
         }
         else if (!int.TryParse(input, out position))
-        {
-            Console.WriteLine("Invalid input. Enter a number from 1 to 9.");
-            return;
-        }
+            throw new InvalidMoveException("Invalid input. Enter a number from 1 to 9.");
 
         if (!grid.IsValidPosition(position))
-        {
-            Console.WriteLine("Invalid move. Choose an empty position from 1 to 9.");
-            return;
-        }
+            throw new InvalidMoveException("Invalid move. Choose an empty position from 1 to 9.");
 
         _pendingPosition = position;
 

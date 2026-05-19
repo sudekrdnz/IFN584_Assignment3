@@ -14,7 +14,4 @@ public abstract class Piece
         Symbol = symbol;
     }
 
-    // Virtual (not abstract) — most pieces have no special effect.
-    // Only override when a piece type has a meaningful effect on the board.
-    public virtual void ApplyEffect(GameBoard board) { }
 }

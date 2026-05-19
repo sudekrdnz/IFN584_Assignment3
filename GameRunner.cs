@@ -40,6 +40,7 @@ public static class GameRunner
         return Console.ReadLine()?.Trim() ?? label;
     }
 
+
     public static int ReadBoardSize(int min, int max, int def,
         string label = "board size")
     {

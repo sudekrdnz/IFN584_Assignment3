@@ -1,4 +1,5 @@
 using BoardGameFramework.Core;
+using BoardGameFramework.Core.Exceptions;
 using BoardGameFramework.Core.Commands;
 using BoardGameFramework.Core.Players;
 using BoardGameFramework.Gomoku.Commands;
@@ -106,22 +107,12 @@ public class GomokuGame : BoardGame
 
         if (!_gomokuGrid.TryParseCoordinate(
             input, out int row, out int col))
-        {
-            Console.WriteLine(
-                "Invalid coordinate. " +
-                "Use format like H8 " +
-                $"(A-{_gomokuGrid.ColLabels[^1]}, " +
-                $"1-{_gomokuGrid.Rows})");
-            return;
-        }
+            throw new InvalidMoveException(
+                $"Invalid coordinate. Use format like H8 " +
+                $"(A-{_gomokuGrid.ColLabels[^1]}, 1-{_gomokuGrid.Rows})");
 
         if (!_gomokuGrid.IsEmpty(row, col))
-        {
-            Console.WriteLine(
-                "That cell is already occupied. " +
-                "Try again.");
-            return;
-        }
+            throw new InvalidMoveException("That cell is already occupied. Try again.");
 
         string snapshot = _gomokuGrid.ExportState();
         char symbol = player.PlayerNumber == 1 

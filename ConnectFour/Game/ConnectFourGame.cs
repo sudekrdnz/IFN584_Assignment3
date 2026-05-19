@@ -1,4 +1,5 @@
 using BoardGameFramework.Core;
+using BoardGameFramework.Core.Exceptions;
 using BoardGameFramework.Core.Commands;
 using BoardGameFramework.Core.Players;
 using BoardGameFramework.ConnectFour.Commands;
@@ -79,10 +80,7 @@ public class ConnectFourGame : BoardGame
         if (player is ConnectFourHumanPlayer human)
         {
             if (!human.ValidateInput(input, _cfGrid))
-            {
-                Console.WriteLine($"Invalid. Enter column 1-{_cfGrid.Columns} (must not be full).");
-                return;
-            }
+                throw new InvalidMoveException($"Invalid. Enter column 1-{_cfGrid.Columns} (must not be full).");
             human.SetColumn(int.Parse(input) - 1);
         }
 
@@ -98,7 +96,7 @@ public class ConnectFourGame : BoardGame
         var piece = new ConnectFourPiece(player.PlayerNumber, symbol);
         int row = _cfGrid.DropDisc(col, piece);
 
-        if (row == -1) { Console.WriteLine("Column is full. Try again."); return; }
+        if (row == -1) throw new InvalidMoveException("Column is full. Try again.");
 
         // Store for Factory Method
         _lastCol = col;

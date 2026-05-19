@@ -1,4 +1,5 @@
 ﻿using BoardGameFramework.Core;
+using BoardGameFramework.Core.Exceptions;
 using BoardGameFramework.Core.Commands;
 using BoardGameFramework.Core.Players;
 using BoardGameFramework.NumericalTicTacToe.Commands;
@@ -98,17 +99,10 @@ public class NumericalTicTacToeGame : BoardGame
         }
         //Check if within board's bounds
         if (row < 0 || row >= _nttGrid.Rows || col < 0 || col >= _nttGrid.Columns)
-        {
-            Console.WriteLine("Out of bounds. Use position 1-9.");
-            return;
-        }
+            throw new InvalidMoveException("Out of bounds. Use position 1-9.");
 
-        //Check if cells are full
         if (_nttGrid.GetCell(row, col) != null)
-        {
-            Console.WriteLine("The cell is full. Try again.");
-            return;
-        }
+            throw new InvalidMoveException("The cell is full. Try again.");
 
         //Check if player numbers are within board's range
         int max = _nttGrid.Rows * _nttGrid.Columns;
@@ -122,10 +116,7 @@ public class NumericalTicTacToeGame : BoardGame
         var playableNumber = _nttGrid.GeneratePlayableNumbers(player.PlayerNumber);
 
         if (!playableNumber.Contains(num))
-        {
-            Console.WriteLine("That number is not available. Try again.");
-            return;
-        }
+            throw new InvalidMoveException("That number is not available. Try again.");
 
         //Save current snapshot of the grid
         string snapshot = _nttGrid.ExportState();

@@ -1,4 +1,5 @@
 using BoardGameFramework.Core.Commands;
+using BoardGameFramework.Core.Exceptions;
 using BoardGameFramework.Core.Grid;
 using BoardGameFramework.Core.Players;
 using BoardGameFramework.Core.Save;
@@ -8,6 +9,7 @@ namespace BoardGameFramework.Core;
 public abstract class BoardGame
 {
     protected Player[] Players;
+    // null! — guaranteed to be set by subclass constructor before any game loop runs
     protected GameBoard Board = null!;
     protected MoveHistory History = new();
     public GameSave SaveManager { get; protected set; } = null!;
@@ -55,8 +57,15 @@ public abstract class BoardGame
             }
             else
             {
-                HandleMove(action);
-                _hasUnsavedMoves = true; // mark unsaved after every move
+                try
+                {
+                    HandleMove(action);
+                    _hasUnsavedMoves = true;
+                }
+                catch (InvalidMoveException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
         }
         Board.Display();

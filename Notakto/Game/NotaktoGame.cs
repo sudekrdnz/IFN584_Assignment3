@@ -1,4 +1,5 @@
 using BoardGameFramework.Core;
+using BoardGameFramework.Core.Exceptions;
 using BoardGameFramework.Core.Commands;
 using BoardGameFramework.Core.Players;
 using BoardGameFramework.Notakto.Commands;
@@ -139,62 +140,31 @@ public class NotaktoGame : BoardGame
         var parts = input.Split(' ');
 
         if (parts.Length != 2)
-        {
-            Console.WriteLine(
-                "Invalid input. Use format: [board 1-3] [position 1-9]");
-            return;
-        }
+            throw new InvalidMoveException("Invalid input. Use format: [board 1-3] [position 1-9]");
 
         if (!int.TryParse(parts[0], out int board))
-        {
-            Console.WriteLine(
-                "Invalid board number.");
-            return;
-        }
+            throw new InvalidMoveException("Invalid board number.");
 
         board--;
 
         if (board < 0 || board > 2)
-        {
-            Console.WriteLine(
-                "Board must be 1, 2 or 3.");
-            return;
-        }
+            throw new InvalidMoveException("Board must be 1, 2 or 3.");
 
         if (_notaktoGrid.IsBoardDead(board))
-        {
-            Console.WriteLine(
-                "That board is already dead.");
-            return;
-        }
+            throw new InvalidMoveException("That board is already dead.");
 
         if (!int.TryParse(parts[1], out int position))
-        {
-            Console.WriteLine(
-                "Invalid input. Use format: [board 1-3] [position 1-9]");
-            return;
-        }
+            throw new InvalidMoveException("Invalid input. Use format: [board 1-3] [position 1-9]");
 
         position--;
         if (position < 0 || position > 8)
-        {
-            Console.WriteLine(
-                "Position must be 1-9.");
-            return;
-        }
+            throw new InvalidMoveException("Position must be 1-9.");
 
         int row = position / 3;
         int col = position % 3;
 
-        if (!_notaktoGrid.IsEmpty(
-            board,
-            row,
-            col))
-        {
-            Console.WriteLine(
-                "Cell already occupied.");
-            return;
-        }
+        if (!_notaktoGrid.IsEmpty(board, row, col))
+            throw new InvalidMoveException("Cell already occupied.");
 
         string snapshot =
             _notaktoGrid.ExportState();
