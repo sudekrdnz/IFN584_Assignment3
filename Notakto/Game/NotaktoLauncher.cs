@@ -56,16 +56,13 @@ public static class NotaktoLauncher
 
     private static void Load()
     {
-        string? name =
-            GameRunner.ReadSaveName("Notakto");
-
-        if (name == null)
-            return;
-
         var temp = new NotaktoGame(
             GameRunner.TempHumanPlayers(
                 (n, i) =>
                     new NotaktoHumanPlayer(n, i)));
+        string? name = GameRunner.ReadSaveName(temp.SaveManager.GameType);
+        if (name == null)
+            return;
 
         if (!GameRunner.TryReadInfo(
             temp.SaveManager.ReadPlayerInfo,

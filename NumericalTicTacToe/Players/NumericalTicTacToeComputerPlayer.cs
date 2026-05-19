@@ -4,14 +4,11 @@ using BoardGameFramework.Core.Players;
 using BoardGameFramework.NumericalTicTacToe.Grid;
 using BoardGameFramework.NumericalTicTacToe.Pieces;
 
-using System;
-
 namespace BoardGameFramework.NumericalTicTacToe.Players;
 
 public class NumericalTicTacToeComputerPlayer : ComputerPlayer
 {
-    private string computerPriorityMove = string.Empty;
-    private readonly Random random = new Random();
+    private readonly Random _rng = new();
 
     public int LastRow { get; private set; } = -1;
     public int LastColumn { get; private set; } = 1;
@@ -82,8 +79,8 @@ public class NumericalTicTacToeComputerPlayer : ComputerPlayer
                 if (grid.GetCell(r, c) == null)
                     free.Add((r, c));
 
-        var (row, col) = free[random.Next(free.Count)];
-        int num = playable[random.Next(playable.Count)];
+        var (row, col) = free[_rng.Next(free.Count)];
+        int num = playable[_rng.Next(playable.Count)];
 
         return (row, col, num);
     }

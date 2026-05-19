@@ -1,5 +1,4 @@
 ﻿using BoardGameFramework.Core.Players;
-using BoardGameFramework.Core.Save;
 using BoardGameFramework.NumericalTicTacToe.Players;
 using BoardGameFramework.NumericalTicTacToe.Save;
 
@@ -30,7 +29,7 @@ public static class NumericalTicTacToeLauncher
             :
             [
                 new NumericalTicTacToeHumanPlayer(p1Name, 1),
-                new NumericalTicTacToeComputerPlayer(GameRunner.ReadName("Player 2"), 2)
+                new NumericalTicTacToeHumanPlayer(GameRunner.ReadName("Player 2"), 2)
             ];
 
         Console.Clear();
@@ -40,12 +39,11 @@ public static class NumericalTicTacToeLauncher
 
     private static void Load()
     {
-        string? name = GameRunner.ReadSaveName("NumericalTicTacToe");
-        if (name == null) 
-            return;
-
         var temp = new NumericalTicTacToeGame(
             GameRunner.TempHumanPlayers((n, i) => new NumericalTicTacToeHumanPlayer(n, i)));
+        string? name = GameRunner.ReadSaveName(temp.SaveManager.GameType);
+        if (name == null) 
+            return;
 
         if (!GameRunner.TryReadInfo(temp.SaveManager.ReadPlayerInfo, name,
             out var names, out var types)) return;

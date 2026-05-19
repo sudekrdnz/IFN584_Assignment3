@@ -1,5 +1,4 @@
 using BoardGameFramework.Core.Players;
-using BoardGameFramework.Core.Save;
 using BoardGameFramework.Gomoku.Players;
 
 namespace BoardGameFramework.Gomoku.Game;
