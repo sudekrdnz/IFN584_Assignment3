@@ -7,6 +7,7 @@ namespace BoardGameFramework.ConnectFour.Grid;
 
 public class ConnectFourGrid : GameBoard
 {
+    private const int WinLength = 4;
     public ConnectFourGrid(int rows = 6, int cols = 7) : base(rows, cols) { }
 
     public override void PlacePiece(int row, int col, Piece piece)
@@ -42,7 +43,7 @@ public class ConnectFourGrid : GameBoard
             for (int col = 0; col < Columns; col++)
             {
                 count = Cells[row, col]?.Owner == player ? count + 1 : 0;
-                if (count >= 4) return true;
+                if (count >= WinLength) return true;
             }
         }
         return false;
@@ -56,7 +57,7 @@ public class ConnectFourGrid : GameBoard
             for (int row = 0; row < Rows; row++)
             {
                 count = Cells[row, col]?.Owner == player ? count + 1 : 0;
-                if (count >= 4) return true;
+                if (count >= WinLength) return true;
             }
         }
         return false;
@@ -64,26 +65,26 @@ public class ConnectFourGrid : GameBoard
 
     private bool CheckDiagonalDown(int player)
     {
-        for (int row = 0; row <= Rows - 4; row++)
-            for (int col = 0; col <= Columns - 4; col++)
+        for (int row = 0; row <= Rows - WinLength; row++)
+            for (int col = 0; col <= Columns - WinLength; col++)
             {
                 int count = 0;
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < WinLength; i++)
                     if (Cells[row + i, col + i]?.Owner == player) count++;
-                if (count == 4) return true;
+                if (count >= WinLength) return true;
             }
         return false;
     }
 
     private bool CheckDiagonalUp(int player)
     {
-        for (int row = 3; row < Rows; row++)
-            for (int col = 0; col <= Columns - 4; col++)
+        for (int row = WinLength - 1; row < Rows; row++)
+            for (int col = 0; col <= Columns - WinLength; col++)
             {
                 int count = 0;
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < WinLength; i++)
                     if (Cells[row - i, col + i]?.Owner == player) count++;
-                if (count == 4) return true;
+                if (count >= WinLength) return true;
             }
         return false;
     }
