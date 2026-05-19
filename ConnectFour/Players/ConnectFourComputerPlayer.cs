@@ -27,7 +27,7 @@ public class ConnectFourComputerPlayer : ComputerPlayer
         Console.WriteLine($"{Name} chose column {col + 1}");
     }
 
-    public int FindBestMove(ConnectFourGrid grid)
+    private int FindBestMove(ConnectFourGrid grid)
     {
         string saved = grid.ExportState();
         for (int c = 0; c < grid.Columns; c++)
@@ -42,7 +42,7 @@ public class ConnectFourComputerPlayer : ComputerPlayer
         return -1;
     }
 
-    public int ChooseRandomMove(ConnectFourGrid grid)
+    private int ChooseRandomMove(ConnectFourGrid grid)
     {
         var available = Enumerable.Range(0, grid.Columns)
             .Where(c => !grid.IsColumnFull(c)).ToList();
