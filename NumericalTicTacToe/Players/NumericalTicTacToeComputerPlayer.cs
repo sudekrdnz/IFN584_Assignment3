@@ -30,7 +30,7 @@ public class NumericalTicTacToeComputerPlayer : ComputerPlayer
         string saved = grid.ExportState();
 
         // 1. Try winning move
-        var win = FindWinningMove(grid, saved);
+        var win = FindWinningMove(grid, PlayerNumber, saved);
         if (win.HasValue)
         {
             (LastRow, LastColumn, LastValue) = win.Value;
@@ -38,27 +38,44 @@ public class NumericalTicTacToeComputerPlayer : ComputerPlayer
             return;
         }
 
-        // 2. Random fallback
+        // 2. Block opponent from winning
+        int opponent = PlayerNumber == 1 ? 2 : 1;
+        var block = FindWinningMove(grid, opponent, saved);
+        if (block.HasValue)
+        {
+            // Place our own number in the blocking cell
+            var ownNums = GetPlayableNumbers(grid).ToList();
+            if (ownNums.Count > 0)
+            {
+                LastRow = block.Value.r;
+                LastColumn = block.Value.c;
+                LastValue = ownNums[_rng.Next(ownNums.Count)];
+                Console.WriteLine($"{Name} played {LastValue} at {LastRow},{LastColumn}");
+                return;
+            }
+        }
+
+        // 3. Random fallback
         var rand = ChooseRandomMove(grid);
         (LastRow, LastColumn, LastValue) = rand;
         Console.WriteLine($"{Name} played {LastValue} at {LastRow},{LastColumn}");
     }
 
-    private (int r, int c, int num)? FindWinningMove(NumericalTicTacToeGrid grid, string saved)
+    private (int r, int c, int num)? FindWinningMove(NumericalTicTacToeGrid grid, int playerNum, string saved)
     {
-        var playable = GetPlayableNumbers(grid).ToList();
+        var playable = grid.GeneratePlayableNumbers(playerNum).ToList();
 
         for (int i = 0; i < grid.Rows; i++)
         {
             for (int k = 0; k < grid.Columns; k++)
             {
-                if (grid.GetCell(i, k) != null) 
+                if (grid.GetCell(i, k) != null)
                     continue;
 
                 foreach (var num in playable)
                 {
-                    grid.PlacePiece(i, k, new NumericalTicTacToePiece(PlayerNumber, num));
-                    bool winningMove = grid.CheckWin(PlayerNumber);
+                    grid.PlacePiece(i, k, new NumericalTicTacToePiece(playerNum, num));
+                    bool winningMove = grid.CheckWin(playerNum);
                     grid.ImportState(saved);
 
                     if (winningMove)

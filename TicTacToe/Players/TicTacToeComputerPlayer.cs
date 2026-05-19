@@ -21,14 +21,23 @@ public class TicTacToeComputerPlayer : ComputerPlayer
         Console.WriteLine($"{Name} (Computer) is thinking...");
         Thread.Sleep(300);
 
-        int move = FindWinningMove(grid);
-        if (move == -1) move = ChooseRandomMove(grid);
+        // 1. Win immediately
+        int move = FindWinningMove(grid, PlayerNumber, Symbol);
+        if (move != -1) { LastPosition = move; Console.WriteLine($"{Name} chose position {move}"); return; }
 
+        // 2. Block opponent from winning
+        int opponent = PlayerNumber == 1 ? 2 : 1;
+        char opponentSymbol = opponent == 1 ? 'X' : 'O';
+        move = FindWinningMove(grid, opponent, opponentSymbol);
+        if (move != -1) { LastPosition = move; Console.WriteLine($"{Name} chose position {move}"); return; }
+
+        // 3. Random fallback
+        move = ChooseRandomMove(grid);
         LastPosition = move;
         Console.WriteLine($"{Name} chose position {move}");
     }
 
-    private int FindWinningMove(TicTacToeGrid grid)
+    private int FindWinningMove(TicTacToeGrid grid, int playerNum, char sym)
     {
         string saved = grid.ExportState();
 
@@ -36,8 +45,8 @@ public class TicTacToeComputerPlayer : ComputerPlayer
         {
             if (!grid.IsValidPosition(pos)) continue;
 
-            grid.PlaceAtPosition(pos, new TicTacToePiece(PlayerNumber, Symbol));
-            bool wins = grid.CheckWin(PlayerNumber);
+            grid.PlaceAtPosition(pos, new TicTacToePiece(playerNum, sym));
+            bool wins = grid.CheckWin(playerNum);
             grid.ImportState(saved);
 
             if (wins) return pos;

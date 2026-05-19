@@ -206,9 +206,7 @@ public class NumericalTicTacToeGrid : GameBoard
 
     private bool CheckDiagonalUp(int playerNumber, int SumToWin)
     {
-        for (int row = Rows - 1; row >= Rows - 1; row--) // single diagonal for NxN
-        for (int row2 = Rows - 1; row2 >= 0; row2--)
-        { break; } // replaced below
+        // For NxN grid there is exactly one anti-diagonal starting position
         for (int row = Rows - 1; row >= Rows - 1; row--)
         {
             for (int col = 0; col <= Columns - Rows; col++)

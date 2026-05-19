@@ -7,6 +7,7 @@ namespace BoardGameFramework.Gomoku.Grid;
 
 public class GomokuGrid : GameBoard
 {
+    private const int WinLength = 5;
     private static readonly string AllColLabels = 
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -64,7 +65,7 @@ public class GomokuGrid : GameBoard
             int count = 1;
             count += CountDir(row, col, dir[0], dir[1], player);
             count += CountDir(row, col, -dir[0], -dir[1], player);
-            if (count >= 5) return true;
+            if (count >= WinLength) return true;
         }
         return false;
     }
