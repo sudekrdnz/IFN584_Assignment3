@@ -56,12 +56,14 @@ public class NumericalTicTacToeGame : BoardGame
         if (player is NumericalTicTacToeComputerPlayer computer)
         {
             computer.ChooseMove(_nttGrid);
-            return $"{computer.LastRow},{computer.LastColumn}={computer.LastValue}";
+            // Convert row/col to 1-based position
+            int pos = computer.LastRow * _nttGrid.Columns + computer.LastColumn + 1;
+            return $"{pos}={computer.LastValue}";
         }
         Console.WriteLine($"{player.Name}, your numbers: {string.Join(", ", nums)}");
         Console.Write(
             $"{player.Name}'s turn " +
-            $"[row,col=value / H=help / S=save / U=undo / R=redo / Q=quit]: ");
+            $"[pos=value / H=help / S=save / U=undo / R=redo / Q=quit]: ");
         return Console.ReadLine()?.Trim() ?? "";
     }
 
@@ -72,31 +74,30 @@ public class NumericalTicTacToeGame : BoardGame
         int col;
         int num;
 
+        // Input format: position=value  e.g. "5=7"
+        // position: 1-9 (top-left to bottom-right), value: player's available number
         try
         {
-            string[] inputArray = input.Split("=");
-
-            num = int.Parse(inputArray[1]);
-
-            string[] indices = inputArray[0].Split(",");
-
-            row = int.Parse(indices[0]);
-            col = int.Parse(indices[1]);
+            string[] parts = input.Split("=");
+            int position = int.Parse(parts[0]) - 1; // 0-based
+            num = int.Parse(parts[1]);
+            row = position / _nttGrid.Columns;
+            col = position % _nttGrid.Columns;
         }
         catch (FormatException)
         {
-            Console.WriteLine("Incorrect format. Use row,col=num");
+            Console.WriteLine("Incorrect format. Use position=value  e.g. 5=7");
             return;
         }
         catch (IndexOutOfRangeException)
         {
-            Console.WriteLine("Incorrect format. Use row,col=num");
+            Console.WriteLine("Incorrect format. Use position=value  e.g. 5=7");
             return;
         }
         //Check if within board's bounds
         if (row < 0 || row >= _nttGrid.Rows || col < 0 || col >= _nttGrid.Columns)
         {
-            Console.WriteLine("Out of bounds. Try again.");
+            Console.WriteLine("Out of bounds. Use position 1-9.");
             return;
         }
 
