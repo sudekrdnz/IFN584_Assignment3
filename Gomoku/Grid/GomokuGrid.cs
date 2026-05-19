@@ -87,17 +87,32 @@ public class GomokuGrid : GameBoard
 
     public override string ExportState()
     {
+        // Include grid dimensions so Load can restore the correct board size
         var flat = new List<int>();
         for (int r = 0; r < Rows; r++)
             for (int c = 0; c < Columns; c++)
                 flat.Add(Cells[r, c]?.Owner ?? 0);
-        return JsonSerializer.Serialize(flat);
+        var data = new { Rows, Columns, Cells = flat };
+        return JsonSerializer.Serialize(data);
     }
 
     public override void ImportState(string state)
     {
-        var flat = JsonSerializer
-            .Deserialize<List<int>>(state)!;
+        var doc = JsonSerializer.Deserialize<JsonElement>(state);
+
+        // Restore grid dimensions from save
+        int rows = doc.GetProperty("Rows").GetInt32();
+        int cols = doc.GetProperty("Columns").GetInt32();
+        if (rows != Rows || cols != Columns)
+        {
+            Rows = rows;
+            Columns = cols;
+            Cells = new Core.Pieces.Piece?[rows, cols];
+        }
+
+        var flat = doc.GetProperty("Cells")
+            .EnumerateArray().Select(e => e.GetInt32()).ToList();
+
         for (int r = 0; r < Rows; r++)
             for (int c = 0; c < Columns; c++)
             {

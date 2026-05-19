@@ -96,7 +96,6 @@ public class NumericalTicTacToeGame : BoardGame
         {
             throw new InvalidMoveException("Incorrect format. Use position=value  e.g. 5=7");
         }
-        //Check if within board's bounds
         if (row < 0 || row >= _nttGrid.Rows || col < 0 || col >= _nttGrid.Columns)
             throw new InvalidMoveException("Out of bounds. Use position 1-9.");
 
@@ -107,7 +106,6 @@ public class NumericalTicTacToeGame : BoardGame
         if (num < 1 || num > max)
             throw new InvalidMoveException($"You must input a number between 1 and {max}.");
 
-        //Check if numbers belong to player
         var playableNumber = _nttGrid.GeneratePlayableNumbers(player.PlayerNumber);
 
         if (!playableNumber.Contains(num))
@@ -131,7 +129,6 @@ public class NumericalTicTacToeGame : BoardGame
         History.Record(cmd);
         TurnCount++;
 
-        //Check if game has ended
         if (CheckGameOver())
         {
             IsGameOver = true;

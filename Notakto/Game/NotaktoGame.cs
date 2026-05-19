@@ -40,8 +40,8 @@ public class NotaktoGame : BoardGame
     {
         HelpMenu.Clear();
         HelpMenu.AddCommand(
-            "1 A1",
-            "Place X on Board 1 at A1");
+            "B P",
+            "Place X: Board 1-3, Position 1-9 (e.g. 1 5)");
 
         HelpMenu.AddCommand(
             "U",
