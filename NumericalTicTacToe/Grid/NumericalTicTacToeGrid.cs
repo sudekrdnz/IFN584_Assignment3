@@ -27,20 +27,13 @@ public class NumericalTicTacToeGrid : GameBoard
 
     public IEnumerable<int> GeneratePlayableNumbers(int playerNumber)
     {
-        int maxNumber = Rows * Columns; //The maximum numbers we can have, based on grid rows and columns
+        int maxNumber = Rows * Columns;
+        var allNumbers = Enumerable.Range(1, maxNumber);
 
-        var allNumbers = Enumerable.Range(1, maxNumber); //List numbers from 1 to maxNumber
-
-        IEnumerable<int> allocateNumbers;
-
-        if (playerNumber == 1)
-        {
-            allocateNumbers = allNumbers.Where(n => n % 2 == 1); //Allocate odd numbers for P1
-        }
-        else
-        {
-            allocateNumbers = allNumbers.Where(n => n % 2 == 0); //Allocate even numbers for p2
-        }
+        // Player 1 = odd numbers, Player 2 = even numbers
+        IEnumerable<int> allocateNumbers = playerNumber == 1
+            ? allNumbers.Where(n => n % 2 == 1)
+            : allNumbers.Where(n => n % 2 == 0);
 
         var removedNumbers = Cells
             .OfType<NumericalTicTacToePiece>()
@@ -103,7 +96,6 @@ public class NumericalTicTacToeGrid : GameBoard
         }
     }
 
-    //To be used when loading a game; set grid size and reinitialise to match the save data
     public void ImportSize(int rows, int columns)
     {
         Rows = rows;

@@ -114,11 +114,9 @@ public class NumericalTicTacToeGame : BoardGame
 
         string snapshot = _nttGrid.ExportState();
 
-        //Move number onto the grid
         _nttGrid.PlacePiece(row, col,
         new NumericalTicTacToePiece(player.PlayerNumber, num));
 
-        //To be used by MoveCommand
         _lastRow = row;
         _lastCol = col;
         _lastNumber = num;
