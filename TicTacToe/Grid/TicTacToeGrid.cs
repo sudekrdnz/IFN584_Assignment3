@@ -14,7 +14,7 @@ public class TicTacToeGrid : GameBoard
 
     public bool IsValidPosition(int position)
     {
-        if (position < 1 || position > 9) return false;
+        if (position < 1 || position > Rows * Columns) return false;
         int row = (position - 1) / 3;
         int col = (position - 1) % 3;
         return IsEmpty(row, col);

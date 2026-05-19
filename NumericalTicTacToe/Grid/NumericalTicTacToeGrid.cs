@@ -241,7 +241,7 @@ public class NumericalTicTacToeGrid : GameBoard
 
     private bool CheckDiagonalDown(int playerNumber, int SumToWin)
     {
-        for (int row = 0; row <= Rows - Rows; row++) // row 0 only for NxN grid
+        for (int row = 0; row <= 0; row++) // 3x3: only one down-diagonal starting position
         {
             for (int col = 0; col <= Columns - Rows; col++)
             {

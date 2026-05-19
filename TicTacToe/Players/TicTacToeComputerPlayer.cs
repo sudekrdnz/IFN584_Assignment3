@@ -41,7 +41,7 @@ public class TicTacToeComputerPlayer : ComputerPlayer
     {
         string saved = grid.ExportState();
 
-        for (int pos = 1; pos <= 9; pos++)
+        for (int pos = 1; pos <= grid.Rows * grid.Columns; pos++)
         {
             if (!grid.IsValidPosition(pos)) continue;
 
@@ -57,7 +57,7 @@ public class TicTacToeComputerPlayer : ComputerPlayer
 
     private int ChooseRandomMove(TicTacToeGrid grid)
     {
-        var available = Enumerable.Range(1, 9)
+        var available = Enumerable.Range(1, grid.Rows * grid.Columns)
             .Where(grid.IsValidPosition)
             .ToList();
 
