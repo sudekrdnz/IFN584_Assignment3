@@ -209,6 +209,25 @@ public abstract class BoardGame
         History.Clear();
     }
 
+    // Shared LoadGame logic — all subclasses restore the same state fields.
+    // Each game's SaveManager already knows the correct types; no override needed.
+    public void LoadGame(string path)
+    {
+        try
+        {
+            SaveManager.LoadFromFile(path);
+            var (playerIndex, turnCount) = SaveManager.GetLoadedState();
+            CurrentPlayerIndex = playerIndex;
+            TurnCount = turnCount;
+            Console.WriteLine("Game loaded successfully!");
+        }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            throw;
+        }
+    }
+
     protected abstract void Initialise();
     protected abstract void OnAfterMove();
     protected abstract bool CheckGameOver();
