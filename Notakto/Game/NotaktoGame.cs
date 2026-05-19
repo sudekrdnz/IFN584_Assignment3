@@ -264,18 +264,4 @@ public class NotaktoGame : BoardGame
             "Opponent killed the final board.");
     }
 
-    public void LoadGame(string path)
-    {
-        _notaktoSave.LoadFromFile(path);
-
-        var (playerIndex, turnCount) =
-            _notaktoSave.GetLoadedState();
-
-        CurrentPlayerIndex = playerIndex;
-
-        TurnCount = turnCount;
-
-        Console.WriteLine(
-            "Game loaded successfully!");
-    }
 }

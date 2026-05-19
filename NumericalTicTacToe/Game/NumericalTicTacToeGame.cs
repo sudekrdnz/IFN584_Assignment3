@@ -38,6 +38,9 @@ public class NumericalTicTacToeGame : BoardGame
         Console.WriteLine($"Sum required to win: {_nttGrid.SumToWin}");
     }
 
+    protected override void OnBeforeSave(int currentPlayerIndex, int turnCount)
+        => _nttSave.SetState(currentPlayerIndex, turnCount);
+
     protected override void InitialiseHelpMenu()
     {
         HelpMenu.AddCommand("1,9", "Use format: row,col=value");
@@ -192,21 +195,4 @@ public class NumericalTicTacToeGame : BoardGame
         }
     }
 
-    public void LoadGame(string path)
-    {
-        try
-        {
-            _nttSave.LoadFromFile(path);
-
-            var (playerIndex, turnCount) = _nttSave.GetLoadedState();
-            CurrentPlayerIndex = playerIndex;
-            TurnCount = turnCount;
-            Console.WriteLine("Game loaded successfully!");
-        }
-        catch (InvalidOperationException _exception)
-        {
-            Console.WriteLine($"Error: {_exception.Message}");
-            throw;
-        }
-    }
 }
