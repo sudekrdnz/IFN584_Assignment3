@@ -101,20 +101,19 @@ public class NotaktoGame : BoardGame
         {
             computer.ChooseMove(_notaktoGrid);
 
-            string coord =
-                $"{computer.LastBoard + 1} " +
-                $"{(char)('A' + computer.LastCol)}" +
-                $"{computer.LastRow + 1}";
+            // Convert board/row/col back to "B P" format (position = row*3+col+1)
+            int pos = computer.LastRow * 3 + computer.LastCol + 1;
+            string coord = $"{computer.LastBoard + 1} {pos}";
 
             Console.WriteLine(
-                $"{player.Name} played {coord}");
+                $"{player.Name} played Board {computer.LastBoard + 1} position {pos}");
 
             return coord;
         }
 
         Console.Write(
             $"\n{player.Name}'s turn " +
-            $"[board coordinate e.g. 1 A1]: ");
+            $"['B P' / H=help / S=save / U=undo / R=redo / Q=quit]: ");
 
         return Console.ReadLine()?.Trim() ?? "";
     }
@@ -142,7 +141,7 @@ public class NotaktoGame : BoardGame
         if (parts.Length != 2)
         {
             Console.WriteLine(
-                "Invalid format. Use: 1 A1");
+                "Invalid input. Use format: [board 1-3] [position 1-9]");
             return;
         }
 
@@ -169,26 +168,23 @@ public class NotaktoGame : BoardGame
             return;
         }
 
-        string coordinate =
-            parts[1].ToUpper();
-
-        if (coordinate.Length != 2)
+        if (!int.TryParse(parts[1], out int position))
         {
             Console.WriteLine(
-                "Invalid coordinate.");
+                "Invalid input. Use format: [board 1-3] [position 1-9]");
             return;
         }
 
-        int col = coordinate[0] - 'A';
-        int row = coordinate[1] - '1';
-
-        if (row < 0 || row > 2 ||
-            col < 0 || col > 2)
+        position--;
+        if (position < 0 || position > 8)
         {
             Console.WriteLine(
-                "Coordinate must be A1-C3.");
+                "Position must be 1-9.");
             return;
         }
+
+        int row = position / 3;
+        int col = position % 3;
 
         if (!_notaktoGrid.IsEmpty(
             board,

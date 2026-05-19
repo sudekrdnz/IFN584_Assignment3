@@ -145,29 +145,50 @@ public class NotaktoGrid : GameBoard
     {
         Console.WriteLine();
 
+        // Header row: Board 1   Board 2   Board 3
+        Console.Write("  ");
         for (int b = 0; b < 3; b++)
         {
-            Console.WriteLine(
-                $"Board {b + 1} " +
-                (_deadBoards[b]
-                    ? "[DEAD]"
-                    : ""));
+            string label = _deadBoards[b]
+                ? $"Board {b + 1} [DEAD]"
+                : $"Board {b + 1}";
+            Console.Write($"{label,-18}");
+        }
+        Console.WriteLine();
+        Console.WriteLine();
 
-            for (int r = 0; r < 3; r++)
+        // Grid rows: all 3 boards side by side
+        // Position numbers: 1-3 top row, 4-6 mid, 7-9 bottom
+        string[] separator = ["---+---+---", "---+---+---", "---+---+---"];
+
+        for (int r = 0; r < 3; r++)
+        {
+            // Cell row
+            Console.Write("  ");
+            for (int b = 0; b < 3; b++)
             {
                 for (int c = 0; c < 3; c++)
                 {
-                    char symbol =
-                        _boards[b, r, c]?.Symbol
-                        ?? '.';
-
+                    char symbol = _boards[b, r, c]?.Symbol ?? ' ';
                     Console.Write($" {symbol} ");
+                    if (c < 2) Console.Write("|");
                 }
+                Console.Write("   ");
+            }
+            Console.WriteLine();
 
+            // Separator row (not after last row)
+            if (r < 2)
+            {
+                Console.Write("  ");
+                for (int b = 0; b < 3; b++)
+                {
+                    Console.Write(separator[b]);
+                    Console.Write("   ");
+                }
                 Console.WriteLine();
             }
-
-            Console.WriteLine();
         }
+        Console.WriteLine();
     }
 }
