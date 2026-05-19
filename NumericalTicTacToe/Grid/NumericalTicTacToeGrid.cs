@@ -7,11 +7,11 @@ namespace BoardGameFramework.NumericalTicTacToe.Grid;
 
 public class NumericalTicTacToeGrid : GameBoard
 {
-    public int sumToWin { get; }
+    public int SumToWin { get; }
 
     public NumericalTicTacToeGrid(int size) : base(size, size)
     {
-        sumToWin = size * (size * size + 1) / 2;
+        SumToWin = size * (size * size + 1) / 2;
     }
 
     public override void PlacePiece(int row, int column, Piece piece)
@@ -19,13 +19,10 @@ public class NumericalTicTacToeGrid : GameBoard
 
     public override bool CheckWin(int playerNumber)
     {
-        if (CheckHorizontal(playerNumber, sumToWin) || CheckVertical(playerNumber, sumToWin) || CheckDiagonalDown(playerNumber, sumToWin) || CheckDiagonalUp(playerNumber, sumToWin))
-        {
-            Console.WriteLine($"Player {playerNumber} is the winner!");
-            return true;
-        }
-
-        return false;
+        return CheckHorizontal(playerNumber, SumToWin)
+            || CheckVertical(playerNumber, SumToWin)
+            || CheckDiagonalDown(playerNumber, SumToWin)
+            || CheckDiagonalUp(playerNumber, SumToWin);
     }
 
     public IEnumerable<int> GeneratePlayableNumbers(int playerNumber)
@@ -138,7 +135,7 @@ public class NumericalTicTacToeGrid : GameBoard
         Console.WriteLine("+");
     }
 
-    private bool CheckHorizontal(int playerNumber, int sumToWin)
+    private bool CheckHorizontal(int playerNumber, int SumToWin)
     {
         for (int row = 0; row < Rows; row++)
         {
@@ -162,14 +159,14 @@ public class NumericalTicTacToeGrid : GameBoard
                 sum += piece.Value;
             }
 
-            if (full && sum == sumToWin)
+            if (full && sum == SumToWin)
                 return true;
         }
 
         return false;
     }
 
-    private bool CheckVertical(int playerNumber, int sumToWin)
+    private bool CheckVertical(int playerNumber, int SumToWin)
     {
         for (int col = 0; col < Columns; col++)
         {
@@ -192,7 +189,7 @@ public class NumericalTicTacToeGrid : GameBoard
                 sum += piece.Value;
             }
 
-            if (full && sum == sumToWin)
+            if (full && sum == SumToWin)
                 return true;
         }
 
@@ -200,7 +197,7 @@ public class NumericalTicTacToeGrid : GameBoard
     }
 
 
-    private bool CheckDiagonalUp(int playerNumber, int sumToWin)
+    private bool CheckDiagonalUp(int playerNumber, int SumToWin)
     {
         for (int row = 2; row < Rows; row++)
         {
@@ -225,7 +222,7 @@ public class NumericalTicTacToeGrid : GameBoard
                     sum += piece.Value;
                 }
 
-                if (full && sum == sumToWin)
+                if (full && sum == SumToWin)
                     return true;
             }
         }
@@ -234,7 +231,7 @@ public class NumericalTicTacToeGrid : GameBoard
     }
 
 
-    private bool CheckDiagonalDown(int playerNumber, int sumToWin)
+    private bool CheckDiagonalDown(int playerNumber, int SumToWin)
     {
         for (int row = 0; row <= Rows - 3; row++)
         {
@@ -259,7 +256,7 @@ public class NumericalTicTacToeGrid : GameBoard
                     sum += piece.Value;
                 }
 
-                if (full && sum == sumToWin)
+                if (full && sum == SumToWin)
                     return true;
             }
         }
