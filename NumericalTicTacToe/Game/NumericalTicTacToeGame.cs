@@ -35,7 +35,7 @@ public class NumericalTicTacToeGame : BoardGame
         BaseInitialise();
         InitialiseHelpMenu();
         Console.WriteLine($"=== Numerical Tic Tac Toe ({_nttGrid.Rows}x{_nttGrid.Columns}) ===");
-        Console.WriteLine($"Sum required to win: {_nttGrid.sumToWin}");
+        Console.WriteLine($"Sum required to win: {_nttGrid.SumToWin}");
     }
 
     protected override void InitialiseHelpMenu()
@@ -81,7 +81,12 @@ public class NumericalTicTacToeGame : BoardGame
             row = int.Parse(indices[0]);
             col = int.Parse(indices[1]);
         }
-        catch
+        catch (FormatException)
+        {
+            Console.WriteLine("Incorrect format. Use row,col=num");
+            return;
+        }
+        catch (IndexOutOfRangeException)
         {
             Console.WriteLine("Incorrect format. Use row,col=num");
             return;
