@@ -16,12 +16,15 @@ public class NotaktoGrid : GameBoard
         _deadBoards = new bool[3];
     }
 
-    // Required abstract method from GameBoard
+    // Required abstract method from GameBoard — not used in Notakto
+    // Notakto uses the 4-parameter overload (board, row, col, piece) instead
     public override void PlacePiece(
         int row,
         int col,
         Piece piece)
     {
+        throw new NotSupportedException(
+            "Use PlacePiece(board, row, col, piece) for Notakto.");
     }
 
     // Actual Notakto placement
@@ -98,15 +101,44 @@ public class NotaktoGrid : GameBoard
             && _boards[b, r3, c3] != null;
     }
 
-    // Temporary simplified save support
     public override string ExportState()
     {
-        return "";
+        // Serialize each cell as 0 (empty) or 1 (occupied),
+        // plus the dead-board flags
+        var cells = new List<int>();
+        for (int b = 0; b < 3; b++)
+            for (int r = 0; r < 3; r++)
+                for (int c = 0; c < 3; c++)
+                    cells.Add(_boards[b, r, c] == null ? 0 : 1);
+
+        var data = new
+        {
+            Cells = cells,
+            DeadBoards = _deadBoards.ToArray()
+        };
+        return System.Text.Json.JsonSerializer.Serialize(data);
     }
 
-    // Temporary simplified load support
     public override void ImportState(string state)
     {
+        var data = System.Text.Json.JsonSerializer
+            .Deserialize<System.Text.Json.JsonElement>(state);
+
+        var cells = data.GetProperty("Cells");
+        int index = 0;
+        for (int b = 0; b < 3; b++)
+            for (int r = 0; r < 3; r++)
+                for (int c = 0; c < 3; c++)
+                {
+                    int val = cells[index++].GetInt32();
+                    _boards[b, r, c] = val == 0
+                        ? null
+                        : new NotaktoPiece(1);
+                }
+
+        var dead = data.GetProperty("DeadBoards");
+        for (int b = 0; b < 3; b++)
+            _deadBoards[b] = dead[b].GetBoolean();
     }
 
     public override void Display()
