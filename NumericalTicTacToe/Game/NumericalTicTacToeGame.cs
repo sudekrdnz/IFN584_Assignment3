@@ -58,8 +58,10 @@ public class NumericalTicTacToeGame : BoardGame
             computer.ChooseMove(_nttGrid);
             return $"{computer.LastRow},{computer.LastColumn}={computer.LastValue}";
         }
-        Console.Write($"{player.Name}, enter your move (row,col=value): ");
-        Console.WriteLine($"{player.Name} your numbers are: {string.Join(", ", nums)}");
+        Console.WriteLine($"{player.Name}, your numbers: {string.Join(", ", nums)}");
+        Console.Write(
+            $"{player.Name}'s turn " +
+            $"[row,col=value / H=help / S=save / U=undo / R=redo / Q=quit]: ");
         return Console.ReadLine()?.Trim() ?? "";
     }
 

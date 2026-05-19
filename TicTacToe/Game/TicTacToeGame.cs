@@ -45,7 +45,10 @@ public class TicTacToeGame : BoardGame
         if (!Players[CurrentPlayerIndex].IsHuman)
             return "AUTO";
 
-        return base.PromptAction();
+        Console.Write(
+            $"\n{Players[CurrentPlayerIndex].Name}'s turn " +
+            $"[1-9 / H=help / S=save / U=undo / R=redo / Q=quit]: ");
+        return Console.ReadLine()?.Trim() ?? "";
     }
 
     protected override void HandleMove(string input)
