@@ -114,51 +114,26 @@ public class NumericalTicTacToeGrid : GameBoard
     public override void Display()
     {
         Console.WriteLine();
-
-        // Show board and position guide side by side
-        // e.g.  Board         Positions
-        //        3  |    |        1 | 2 | 3
-        //       ----+----+----   ---+---+---
-        //           |  7 |        4 | 5 | 6
-        //       ----+----+----   ---+---+---
-        //           |    |  2     7 | 8 | 9
-
-        Console.WriteLine("  Board                Positions");
         for (int row = 0; row < Rows; row++)
         {
-            // Board cell row
             Console.Write("  ");
             for (int col = 0; col < Columns; col++)
             {
                 var piece = Cells[row, col] as NumericalTicTacToePiece;
-                string cell = piece != null ? $"{piece.Value,2}" : "  ";
-                Console.Write($" {cell} ");
-                if (col < Columns - 1) Console.Write("|");
-            }
-
-            // Position guide column
-            Console.Write("     ");
-            for (int col = 0; col < Columns; col++)
-            {
+                // Show placed number, or position number if empty
                 int pos = row * Columns + col + 1;
-                Console.Write($" {pos} ");
+                string cell = piece != null ? $"{piece.Value,2}" : $" {pos}";
+                Console.Write($" {cell} ");
                 if (col < Columns - 1) Console.Write("|");
             }
             Console.WriteLine();
 
-            // Separator row (not after last row)
             if (row < Rows - 1)
             {
                 Console.Write("  ");
                 for (int col = 0; col < Columns; col++)
                 {
-                    Console.Write("----");
-                    if (col < Columns - 1) Console.Write("+");
-                }
-                Console.Write("     ");
-                for (int col = 0; col < Columns; col++)
-                {
-                    Console.Write("---");
+                    Console.Write("-----");
                     if (col < Columns - 1) Console.Write("+");
                 }
                 Console.WriteLine();
