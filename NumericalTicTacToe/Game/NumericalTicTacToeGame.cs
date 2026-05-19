@@ -112,7 +112,6 @@ public class NumericalTicTacToeGame : BoardGame
         if (!playableNumber.Contains(num))
             throw new InvalidMoveException("That number is not available. Try again.");
 
-        //Save current snapshot of the grid
         string snapshot = _nttGrid.ExportState();
 
         //Move number onto the grid
