@@ -138,20 +138,4 @@ public class ConnectFourGame : BoardGame
         }
     }
 
-    public void LoadGame(string path)
-    {
-        try
-        {
-            _cfSave.LoadFromFile(path);
-            var (playerIndex, turnCount) = _cfSave.GetLoadedState();
-            CurrentPlayerIndex = playerIndex;
-            TurnCount = turnCount;
-            Console.WriteLine("Game loaded successfully!");
-        }
-        catch (InvalidOperationException ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
-            throw;
-        }
-    }
 }

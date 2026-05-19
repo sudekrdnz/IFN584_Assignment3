@@ -177,21 +177,4 @@ public class GomokuGame : BoardGame
         }
     }
 
-    public void LoadGame(string path)
-    {
-        try
-        {
-            _gomokuSave.LoadFromFile(path);
-            var (playerIndex, turnCount) =
-                _gomokuSave.GetLoadedState();
-            CurrentPlayerIndex = playerIndex;
-            TurnCount = turnCount;
-            Console.WriteLine("Game loaded successfully!");
-        }
-        catch (InvalidOperationException ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
-            throw;
-        }
-    }
 }

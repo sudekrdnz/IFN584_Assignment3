@@ -150,11 +150,4 @@ public class TicTacToeGame : BoardGame
         SaveManager.SetState(currentPlayerIndex, turnCount);
     }
 
-    public void LoadGame(string name)
-    {
-        SaveManager.LoadFromFile(name);
-        var state = SaveManager.GetLoadedState();
-        CurrentPlayerIndex = state.playerIndex;
-        TurnCount = state.turnCount;
-    }
 }
