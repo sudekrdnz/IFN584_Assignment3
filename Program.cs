@@ -4,7 +4,6 @@ using BoardGameFramework.Gomoku.Game;
 using BoardGameFramework.Notakto.Game;
 using BoardGameFramework.NumericalTicTacToe.Game;
 
-
 namespace BoardGameFramework;
 
 class Program

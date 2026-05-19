@@ -8,9 +8,9 @@ namespace BoardGameFramework.NumericalTicTacToe.Commands;
 
 public class NumericalTicTacToeMoveCommand : MoveCommand
 {
-    public int Row { get; set; }
-    public int Column { get; set; }
-    public int Value { get; set; }
+    public int Row { get; private set; }
+    public int Column { get; private set; }
+    public int Value { get; private set; }
 
     public NumericalTicTacToeMoveCommand(Player player, string gridSnapshot,
         int currentPlayerIndex, int turnCount,
