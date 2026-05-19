@@ -36,7 +36,7 @@ public class ConnectFourGameSave : GameSave
         };
 
         File.WriteAllText(jsonPath,
-            JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            JsonSerializer.Serialize(data, JsonOptions));
         WriteTxtSummary(path);
         Console.WriteLine($"Saved: {jsonPath} and {EnsureTxt(path)}");
     }

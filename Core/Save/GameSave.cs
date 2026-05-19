@@ -18,6 +18,10 @@ namespace BoardGameFramework.Core.Save;
 /// </summary>
 public abstract class GameSave
 {
+    // Shared serializer options — avoids creating a new instance on every save
+    protected static readonly JsonSerializerOptions JsonOptions =
+        new() { WriteIndented = true };
+
     public string GameType { get; }
 
     // Shared fields — every subclass needs these, so they live in Core

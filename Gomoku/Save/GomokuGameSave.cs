@@ -44,10 +44,7 @@ public class GomokuGameSave : GameSave
 
         File.WriteAllText(jsonPath,
             JsonSerializer.Serialize(data,
-                new JsonSerializerOptions 
-                { 
-                    WriteIndented = true 
-                }));
+                JsonOptions));
         WriteTxtSummary(path);
         Console.WriteLine(
             $"Saved: {jsonPath} and {EnsureTxt(path)}");

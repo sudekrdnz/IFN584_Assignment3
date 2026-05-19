@@ -1,9 +1,9 @@
-﻿using BoardGameFramework.Core.Commands;
+﻿using System.Text.Json;
+using BoardGameFramework.Core.Commands;
 using BoardGameFramework.Core.Players;
 using BoardGameFramework.Core.Save;
-using BoardGameFramework.NumericalTicTacToe.Grid;
 using BoardGameFramework.NumericalTicTacToe.Commands;
-using System.Text.Json;
+using BoardGameFramework.NumericalTicTacToe.Grid;
 
 namespace BoardGameFramework.NumericalTicTacToe.Save;
 
@@ -38,7 +38,7 @@ public class NumericalTicTacToeSave : GameSave
         };
 
         File.WriteAllText(jsonPath,
-            JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            JsonSerializer.Serialize(data, JsonOptions));
         WriteTxtSummary(path);
         Console.WriteLine($"Saved: {jsonPath} and {EnsureTxt(path)}");
     }
@@ -65,7 +65,7 @@ public class NumericalTicTacToeSave : GameSave
                 d.GetProperty("TurnCount").GetInt32(),
                 d.GetProperty("Column").GetInt32(),
                 d.GetProperty("Row").GetInt32(),
-                d.GetProperty("Value").GetString()?[0] ?? ' ')).ToList();
+                d.GetProperty("Value").GetInt32())).ToList();
 
         History.LoadHistory(commands);
         Console.WriteLine($"Loaded: {jsonPath}");

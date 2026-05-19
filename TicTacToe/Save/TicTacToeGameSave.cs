@@ -38,7 +38,7 @@ public class TicTacToeGameSave : GameSave
         };
 
         File.WriteAllText(jsonPath,
-            JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
+            JsonSerializer.Serialize(data, JsonOptions));
 
         WriteTxtSummary(path);
         Console.WriteLine($"Saved: {jsonPath} and {EnsureTxt(path)}");
@@ -74,4 +74,4 @@ public class TicTacToeGameSave : GameSave
         History.LoadHistory(commands);
         Console.WriteLine($"Loaded: {jsonPath}");
     }
-}  
+}

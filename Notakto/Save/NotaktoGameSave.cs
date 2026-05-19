@@ -59,10 +59,7 @@ public class NotaktoGameSave : GameSave
             jsonPath,
             JsonSerializer.Serialize(
                 data,
-                new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                }));
+                JsonOptions));
 
         WriteTxtSummary(path);
 
