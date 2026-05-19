@@ -6,7 +6,6 @@ using BoardGameFramework.NumericalTicTacToe.Grid;
 using BoardGameFramework.NumericalTicTacToe.Pieces;
 using BoardGameFramework.NumericalTicTacToe.Players;
 using BoardGameFramework.NumericalTicTacToe.Save;
-using System.IO;
 
 namespace BoardGameFramework.NumericalTicTacToe.Game;
 
@@ -43,7 +42,7 @@ public class NumericalTicTacToeGame : BoardGame
 
     protected override void InitialiseHelpMenu()
     {
-        HelpMenu.AddCommand("1,9", "Use format: row,col=value");
+        HelpMenu.AddCommand("pos=value", "Place number at position 1-9, e.g. 5=7");
         HelpMenu.AddCommand("U", "Undo last move");
         HelpMenu.AddCommand("R", "Redo last undone move");
         HelpMenu.AddCommand("S", "Save game");

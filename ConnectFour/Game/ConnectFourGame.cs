@@ -43,6 +43,7 @@ public class ConnectFourGame : BoardGame
     protected override void Initialise()
     {
         BaseInitialise();
+        _winner = null;
         InitialiseHelpMenu();
         Console.WriteLine($"=== Connect Four ({_cfGrid.Rows}x{_cfGrid.Columns}) ===");
         Console.WriteLine($"{Players[0].Name} = X    {Players[1].Name} = O");

@@ -80,7 +80,7 @@ public class NotaktoGame : BoardGame
     protected override void Initialise()
     {
         BaseInitialise();
-
+        _winner = null;
         InitialiseHelpMenu();
     }
 

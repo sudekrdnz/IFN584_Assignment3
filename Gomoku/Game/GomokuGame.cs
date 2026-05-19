@@ -58,6 +58,7 @@ public class GomokuGame : BoardGame
     protected override void Initialise()
     {
         BaseInitialise();
+        _winner = null;
         InitialiseHelpMenu();
         Console.WriteLine(
             $"=== Gomoku " +
